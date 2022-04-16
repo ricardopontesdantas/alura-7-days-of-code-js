@@ -11,12 +11,12 @@
     <form data-js="form">
         <div>
             <label for="name">Nome</label>
-            <input type="text" name="name" id="name" placeholder="Nome" autofocus>
+            <input type="text" name="name" id="name" data-js="name" placeholder="Nome" required minlength="3" maxlength="120" pattern="[A-Za-zÀ-Úà-úü\s]+" autofocus>
         </div>
 
         <div>
             <label for="birth">Data de Nascimento</label>
-            <input type="date" name="birth" id="birth">
+            <input type="date" name="birth" id="birth" data-js="birth" required>
         </div>
 
         <button type="submit">Salvar</button>
