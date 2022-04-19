@@ -1,11 +1,28 @@
 const form = document.querySelector('[data-js="form"]')
-const name = document.querySelector('[data-js="name"]')
-const birth = document.querySelector('[data-js="birth"]')
+const nameInput = document.querySelector('[data-js="name"]')
+const birthInput = document.querySelector('[data-js="birth"]')
+const indexInput = document.querySelector('[data-js="index"]')
 const peopleListInfo = document.querySelector('[data-js="people-list-info"]')
 const peopleTable = document.querySelector('[data-js="people-table"]')
 const peopleBodyTable = peopleTable.querySelector('tbody')
 
 const people = JSON.parse(localStorage.getItem('#7daysOfCode:person')) || []
+
+peopleBodyTable.addEventListener('click', event => {
+    if (event.target.nodeName === 'BUTTON') {
+        const tr = event.target.parentNode.parentNode
+        const indexPerson = tr.rowIndex - 1
+
+        const tds = tr.querySelectorAll('td')
+
+        const namePerson = tds[0]
+        const birthPerson = tds[1]
+
+        nameInput.value = namePerson.textContent
+        birthInput.value = birthPerson.textContent
+        indexInput.value = indexPerson
+    }
+})
 
 const renderPeople = people => {
     const hasPeople = people.length > 0
@@ -13,7 +30,7 @@ const renderPeople = people => {
 
     if (hasPeople) {
         people.forEach(person => {
-            peopleHTML += `<tr><td>${person.name}</td><td>${person.birth}</td></tr>`
+            peopleHTML += `<tr><td>${person.name}</td><td>${person.birth}</td><td><button>Editar</button></td></tr>`
         })
 
         peopleBodyTable.innerHTML = peopleHTML
@@ -25,20 +42,27 @@ const renderPeople = people => {
 form.addEventListener('submit', (event) => {
     event.preventDefault()
 
-    const { name, birth } = form
+    const { name, birth, index } = form
     const person = { name: name.value, birth: birth.value }
-    people.push(person)
+
+    if (index.value) {
+        people[index.value] = person
+    } else {
+        people.push(person)
+    }
 
     const peopleString = JSON.stringify(people)
-    
     localStorage.setItem('#7daysOfCode:person', peopleString)
 
     if (people.length > 1) {
         renderPeople(people)
     }
+
+    form.reset()
+    indexInput.value = ''
 })
 
-name.oninvalid = function () {
+nameInput.oninvalid = function () {
     this.setCustomValidity('')
 
     if (!this.validity.valid) {
@@ -46,7 +70,7 @@ name.oninvalid = function () {
     }
 }
 
-birth.oninvalid = function () {
+birthInput.oninvalid = function () {
     this.setCustomValidity('')
 
     if (!this.validity.valid) {
