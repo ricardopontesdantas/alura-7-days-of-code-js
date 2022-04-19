@@ -6,7 +6,7 @@ const peopleListInfo = document.querySelector('[data-js="people-list-info"]')
 const peopleTable = document.querySelector('[data-js="people-table"]')
 const peopleBodyTable = peopleTable.querySelector('tbody')
 
-const people = JSON.parse(localStorage.getItem('#7daysOfCode:person')) || []
+const people = JSON.parse(localStorage.getItem('#7daysOfCode:people')) || []
 
 peopleBodyTable.addEventListener('click', event => {
     if (event.target.nodeName === 'BUTTON') {
@@ -35,7 +35,7 @@ const renderPeople = people => {
 
         peopleBodyTable.innerHTML = peopleHTML
     } else {
-        peopleListInfo.innerText = "Nenhum cadastro"
+        peopleBodyTable.innerHTML = '<tr><td colspan="3">Nenhum cadastro</td></tr>'
     }
 }
 
@@ -52,9 +52,9 @@ form.addEventListener('submit', (event) => {
     }
 
     const peopleString = JSON.stringify(people)
-    localStorage.setItem('#7daysOfCode:person', peopleString)
+    localStorage.setItem('#7daysOfCode:people', peopleString)
 
-    if (people.length > 1) {
+    if (people.length > 0) {
         renderPeople(people)
     }
 
