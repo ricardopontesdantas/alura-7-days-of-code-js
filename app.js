@@ -8,29 +8,27 @@ const peopleBodyTable = peopleTable.querySelector('tbody')
 
 const people = JSON.parse(localStorage.getItem('#7daysOfCode:people')) || []
 
-peopleBodyTable.addEventListener('click', event => {
-    if (event.target.nodeName === 'BUTTON') {
-        const tr = event.target.parentNode.parentNode
-        const indexPerson = tr.rowIndex - 1
+const editPerson = index => {
+    nameInput.value = people[index].name
+    birthInput.value = people[index].birth
+    indexInput.value = index
+}
 
-        const tds = tr.querySelectorAll('td')
+const removePerson = (element, index) => {
+    people.pop(index)
+    const peopleString = JSON.stringify(people)
+    localStorage.setItem('#7daysOfCode:people', peopleString)
 
-        const namePerson = tds[0]
-        const birthPerson = tds[1]
-
-        nameInput.value = namePerson.textContent
-        birthInput.value = birthPerson.textContent
-        indexInput.value = indexPerson
-    }
-})
+    element.parentNode.parentNode.remove()
+}
 
 const renderPeople = people => {
     const hasPeople = people.length > 0
     let peopleHTML = ''
 
     if (hasPeople) {
-        people.forEach(person => {
-            peopleHTML += `<tr><td>${person.name}</td><td>${person.birth}</td><td><button>Editar</button></td></tr>`
+        people.forEach((person, index) => {
+            peopleHTML += `<tr><td>${person.name}</td><td>${person.birth}</td><td><button onclick="editPerson(${index})">Editar</button><td><button onclick="removePerson(this, ${index})">Remover</button></td></tr>`
         })
 
         peopleBodyTable.innerHTML = peopleHTML
@@ -60,6 +58,7 @@ form.addEventListener('submit', (event) => {
 
     form.reset()
     indexInput.value = ''
+    form.name.focus()
 })
 
 nameInput.oninvalid = function () {
