@@ -28,7 +28,15 @@ const renderPeople = people => {
 
     if (hasPeople) {
         people.forEach((person, index) => {
-            peopleHTML += `<tr><td>${person.name}</td><td>${person.birth}</td><td><button onclick="editPerson(${index})">Editar</button><td><button onclick="removePerson(this, ${index})">Remover</button></td></tr>`
+            peopleHTML += `
+            <tr>
+                <td>${person.name}</td>
+                <td>${person.birth}</td>
+                <td colspan="2" class="text-center">
+                    <button class="btn btn-outline-warning btn-sm" onclick="editPerson(${index})">Editar</button>
+                    <button class="btn btn-outline-danger btn-sm" onclick="removePerson(this, ${index})">Remover</button>
+                </td>
+            </tr>`
         })
 
         peopleBodyTable.innerHTML = peopleHTML
